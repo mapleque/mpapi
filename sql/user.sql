@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+    `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `appid` VARCHAR(128) NOT NULL,
+    `openid` VARCHAR(128) NOT NULL,
+    `unionid` VARCHAR(128) DEFAULT NULL,
+    `token` VARCHAR(32) NOT NULL,
+    `sessionkey` VARCHAR(128) DEFAULT NULL,
+    `expired_at` DATETIME NOT NULL,
+    `create_at` DATETIME NOT NULL DEFAULT NOW()
+) DEFAULT CHARSET=utf8;
+ALTER TABLE `user` ADD UNIQUE(`token`), ADD UNIQUE(`appid`,`openid`);
+
