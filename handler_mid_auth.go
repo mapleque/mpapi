@@ -29,8 +29,27 @@ func (this *Server) AuthToken(c *http.Context) *http.Status {
 		c.Request.Header.Set("User-Id", strconv.FormatInt(user.Id, 10))
 		c.Request.Header.Set("User-Openid", user.Openid)
 		c.Request.Header.Set("User-Unionid", user.Unionid)
+
+		userExtra := &UserExtra{}
+		this.conn.QueryOne(
+			userExtra,
+			"SELECT * FROM `user_extra` WHERE user_id = ? LIMIT 1",
+			user.Id,
+		)
+		c.Request.Header.Set("User-Extra", userExtra.ToString())
+
+		userMobile := &UserMobile{}
+		this.conn.QueryOne(
+			userMobile,
+			"SELECT * FROM `user_mobile` WHERE user_id = ? LIMIT 1",
+			user.Id,
+		)
+		c.Request.Header.Set("User-Mobile", userMobile.ToString())
+
 		c.Request.Header.Set("uuid", user.Openid)
 		c.Set("User", user)
+		c.Set("UserExtra", userExtra)
+		c.Set("UserMobile", userMobile)
 	}
 	c.Next()
 	return nil

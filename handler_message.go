@@ -112,7 +112,7 @@ func (this *Server) MessageRecieve(c *http.Context) {
 		}
 	}
 
-	user := &UserInfo{}
+	user := &UserExtra{}
 	this.conn.QueryOne(
 		user,
 		"SELECT * FROM user_extra WHERE user_id = (SELECT id FROM `user` WHERE appid=? AND openid=?)",

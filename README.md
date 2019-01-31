@@ -1,19 +1,42 @@
-微信小程序对接
+微信小程序接入
 ====
 
-部署方法
+本项目实现了小程序服务端基于微信api的用户登录状态管理以及业务无关的大部分接口逻辑。
+
+同时本项目还实现了一个用户登录认证代理机制，开发者可以通过本项目服务代理微信请求到自己的服务，代理后的请求头中将会带有：
+
+- `User-Id` 用户唯一id
+- `User-Openid` 用户在当前小程序下的openid
+- `User-Unionid` 用户在当前小程序下的unionid，如果该小程序没有unionid后者未调用过上传敏感信息接口，则该数据为空
+- `User-Extra` 用户的额外信息(json)，包括昵称、头像等，如果未调用过上传敏感信息接口，则该数据为空
+- `User-Mobile` 用户手机号(json)，如果未调用过上传手机号接口，则该数据为空
+
+以上数据都是通过微信相关api收集所得，免去了开发者接入微信的麻烦，只需要关注自己的产品逻辑实现即可。
+
+> 注意：当用户未登录或者部分信息未通过接口上传过，则对应的数据可能为空值。
+
+使用公开服务
+----
+- 搜索小程序"微账号"，按提示注册小程序信息。
+- 在小程序后台添加
+  - request合法域名:`https://mpapi.mapleque.com`
+  - uploadFile合法域名:`https://mpapi.mapleque.com`
+  - downloadFile合法域名:`https://mpapi.mapleque.com`
+- 直接使用`https://mpapi.mapleque.com`下的本项目各接口
+
+私有部署方法
 ----
 
-- 启动nginx，编辑`main/nginx.conf.tpl`后加入到nginx配置中
 - 创建数据库表`sql/*.sql`
-- 编辑配置文件`main/.env.example`为`main/.env`
+- 编辑配置文件`main/.env.example`为`main/.env`或者设置相应的环境变量
 - 编译`go build -o main/service main/main.go`
 - 运行`cd main && ./service`
+- 根据服务端口，配置相关nginx代理
 
 接口文档
 ----
 - 所有请求必须携带Header`User-App: <appid>`，否则接口会返回错误码。
-- 所有Header中带有`User-Token: <token>`的请求都会尝试将`token`转化为UserId。
+- 所有Header中带有`User-Token: <token>`的请求都会尝试通过`token`获取用户信息。
 
 ### 登陆
 
@@ -54,30 +77,6 @@
 
 请求参数定义和返回数据参考[微信文档](https://developers.weixin.qq.com/miniprogram/dev/api/open-api/qr-code/getWXACodeUnlimit.html)。
 
-### 上传敏感信息
-
-> 需要登陆后请求。    
-> 本接口当前只解密数据并存储，并未验签。    
-
-请求路径: `/credentials`
-
-请求参数：
-```
-{
-  "raw_data": <string>,
-  "signature": <string>,
-  "encrypted_data": <string>,
-  "iv": <string>
-}
-```
-
-返回数据：
-```
-{
-  "status": <int>
-}
-```
-
 ### 发送模板通知
 
 > 需要登陆后请求。    
@@ -99,6 +98,30 @@
 ```
 
 部分请求参数定义参考[微信文档](https://developers.weixin.qq.com/miniprogram/dev/api/open-api/template-message/sendTemplateMessage.html)
+
+返回数据：
+```
+{
+  "status": <int>
+}
+```
+
+### 上传敏感信息
+
+> 需要登陆后请求。    
+> 本接口当前只解密数据并存储，并未验签。    
+
+请求路径: `/credentials`
+
+请求参数：
+```
+{
+  "raw_data": <string>,
+  "signature": <string>,
+  "encrypted_data": <string>,
+  "iv": <string>
+}
+```
 
 返回数据：
 ```

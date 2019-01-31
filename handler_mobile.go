@@ -10,12 +10,6 @@ type Mobile struct {
 	IV            string `json:"iv" valid:"(0,),message=invalid param"`
 }
 
-type MobileInfo struct {
-	PhoneNumber     string `json:"phoneNumber" column:"phone_number"`
-	PurePhoneNumber string `json:"purePhoneNumber" column:"pure_phone_number"`
-	CountryCode     string `json:"countryCode" column:"country_code"`
-}
-
 func (this *Server) Mobile(in *Mobile, out interface{}, c *http.Context) *http.Status {
 	userInter, exist := c.Get("User")
 	if !exist {
@@ -40,7 +34,7 @@ func (this *Server) Mobile(in *Mobile, out interface{}, c *http.Context) *http.S
 		"encrypted_data": in.EncryptedData,
 		"result":         data,
 	})
-	mobile := &MobileInfo{}
+	mobile := &UserMobile{}
 	if err := http.BindAndValidJson(mobile, []byte(data)); err != nil {
 		return http.ErrorStatus(STATUS_INTERNAL_ERROR, err)
 	}

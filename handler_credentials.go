@@ -14,13 +14,6 @@ type Credential struct {
 	IV            string `json:"iv" valid:"(0,),message=invalid param"`
 }
 
-type UserInfo struct {
-	Openid    string `json:"openId" column:"openid"`
-	UnionId   string `json:"unionId" column:"unionid"`
-	NickName  string `json:"nickName" column:"nickname"`
-	AvatarUrl string `json:"avatarUrl" column:"avatar_url"`
-}
-
 func (this *Server) Credentials(in *Credential, out interface{}, c *http.Context) *http.Status {
 	userInter, exist := c.Get("User")
 	if !exist {
@@ -45,7 +38,7 @@ func (this *Server) Credentials(in *Credential, out interface{}, c *http.Context
 		"encrypted_data": in.EncryptedData,
 		"result":         data,
 	})
-	userinfo := &UserInfo{}
+	userinfo := &UserExtra{}
 	if err := http.BindAndValidJson(userinfo, []byte(data)); err != nil {
 		return http.ErrorStatus(STATUS_INTERNAL_ERROR, err)
 	}
