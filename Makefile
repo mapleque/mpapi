@@ -2,7 +2,7 @@
 all: build
 
 run:
-	cd main && main.go
+	cd main && go run main.go
 
 build:
 	-mkdir bin

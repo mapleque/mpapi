@@ -16,7 +16,7 @@ func main() {
 	config.AddConfiger(config.ENV, "config", "")
 	conf := config.Use("config")
 
-	logdir := conf.Get("LOG_DIR") + conf.Get("HOSTNAME")
+	logdir := conf.Get("LOG_DIR")
 	if logdir != "" {
 		if err := os.MkdirAll(logdir, 0777); err != nil {
 			fmt.Println("load log dir error", err)
