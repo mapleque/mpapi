@@ -13,5 +13,5 @@ CREATE TABLE `mp_notify` (
     `additional` TEXT,
     `active_at` DATETIME NOT NULL COMMENT '预期发送时间',
     `create_at` DATETIME NOT NULL DEFAULT NOW()
-) DEFAULT CHARSET=utf8 COMMENT '小程序通知队列';
+) DEFAULT CHARSET=utf8mb4 COMMENT '小程序通知队列';
 ALTER TABLE `mp_notify` ADD INDEX (`user_id`), ADD INDEX (`status`), ADD INDEX (`active_at`);
