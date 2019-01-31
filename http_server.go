@@ -17,27 +17,20 @@ const (
 type Server struct {
 	conn   mysql.Connector
 	logger logger.Loggerer
-
-	authorization   string
-	messageApi      string
-	messageApiToken string
 }
 
-func New(conn mysql.Connector, log logger.Loggerer, messageApi, messageApiToken string) *Server {
+func New(conn mysql.Connector, log logger.Loggerer) *Server {
 	return &Server{
-		conn:            conn,
-		logger:          log,
-		messageApi:      messageApi,
-		messageApiToken: messageApiToken,
+		conn:   conn,
+		logger: log,
 	}
 }
 
-func (this *Server) Run(host, token string) {
+func (this *Server) Run(host string) {
 	server := http.New(host)
 	server.Use(http.LogHandler)
 	server.Use(http.RecoveryHandler)
 	server.Use(http.TraceHandler)
-	this.authorization = token
 
 	this.initRouter(server)
 	fmt.Println("http server listen on", host)

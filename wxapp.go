@@ -16,11 +16,15 @@ import (
 )
 
 type WXApp struct {
-	Id         int64  `json:"id"`
-	Appid      string `json:"appid"`
-	Secret     string `json:"secret"`
-	Additional string `json:"additional"`
-	MessageKey string `json:"message_key"`
+	Id              int64  `json:"id"`
+	Appid           string `json:"appid"`
+	Secret          string `json:"secret"`
+	Host            string `json:"host"`
+	HostToken       string `json:"host_token"`
+	MessageKey      string `json:"message_key"`
+	MessageApi      string `json:"message_api"`
+	MessageApiToken string `json:"message_api_token"`
+	Additional      string `json:"additional"`
 
 	hasRefreshToken bool
 

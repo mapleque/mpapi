@@ -45,14 +45,11 @@ func main() {
 	ss := service.New(
 		conn,
 		log,
-		conf.Get("MESSAGE_API"),
-		conf.Get("MESSAGE_API_TOKEN"),
 	)
 
 	// boot service
 	go ss.Run(
-		"0.0.0.0:"+conf.Get("HTTP"),
-		conf.Get("SERVICE_HTTP_TOKEN"),
+		"0.0.0.0:" + conf.Get("HTTP"),
 	)
 
 	ns := service.NewNotifyServer(conn)

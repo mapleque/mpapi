@@ -7,35 +7,6 @@ import (
 	"github.com/mapleque/kelp/mysql"
 )
 
-type User struct {
-	Id         int64  `json:"id"`
-	Appid      string `json:"appid"`
-	Openid     string `json:"openid"`
-	Unionid    string `json:"unionid"`
-	Sessionkey string `json:"sessionkey"`
-	Token      string `json:"token"`
-}
-
-func (this *Server) WXAppCheck(c *http.Context) *http.Status {
-	appid := c.Request.Header.Get("User-App")
-	if appid == "" {
-		appid = c.QueryDefault("appid", "")
-	}
-	if appid == "" {
-		return http.JsonStatus(STATUS_NOT_ALLOW, "invalid app param")
-	}
-	app, err := NewWXApp(appid, this.conn)
-	if err == mysql.NO_DATA_TO_BIND {
-		return http.JsonStatus(STATUS_NOT_ALLOW, "need regist app")
-	}
-	if err != nil {
-		return http.ErrorStatus(STATUS_INTERNAL_ERROR, err)
-	}
-	c.Set("User-App", app)
-	c.Next()
-	return nil
-}
-
 func (this *Server) AuthToken(c *http.Context) *http.Status {
 	token := c.Request.Header.Get("User-Token")
 	if token != "" {

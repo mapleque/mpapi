@@ -30,6 +30,9 @@ func NewNotifyServer(conn mysql.Connector) *NotifyServer {
 }
 
 func (this *NotifyServer) StartNotify(maxThread int) {
+	if maxThread < 1 {
+		return
+	}
 	nextSig := make(chan bool, 1)
 	nextSig <- true
 	for {

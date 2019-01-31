@@ -3,7 +3,11 @@ CREATE TABLE `app` (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `appid` VARCHAR(128) NOT NULL,
     `secret` VARCHAR(128) NOT NULL,
+    `host` VARCHAR(512) NOT NULL DEFAULT '',
+    `host_token` VARCHAR(128) NOT NULL DEFAULT '',
     `message_key` VARCHAR(128) NOT NULL DEFAULT '',
+    `message_api` VARCHAR(512) NOT NULL DEFAULT '',
+    `message_api_token` VARCHAR(128) NOT NULL DEFAULT '',
     `additional` VARCHAR(128) NOT NULL DEFAULT '',
     `create_at` DATETIME NOT NULL DEFAULT NOW()
 ) DEFAULT CHARSET=utf8;
