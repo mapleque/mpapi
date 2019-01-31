@@ -1,5 +1,8 @@
-微信小程序接入
+微信小程序服务端代理
 ====
+
+项目简介
+----
 
 本项目实现了小程序服务端基于微信api的用户登录状态管理以及业务无关的大部分接口逻辑。
 
@@ -27,6 +30,7 @@
 私有部署方法
 ----
 
+- 从Github[下载代码](https://github.com/mapleque/mpapi)
 - 创建数据库表`sql/*.sql`
 - 编辑配置文件`main/.env.example`为`main/.env`或者设置相应的环境变量
 - 编译`go build -o main/service main/main.go`
